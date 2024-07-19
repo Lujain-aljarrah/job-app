@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
 import Card from './Card';
-
+import api from '../utils/api'
 const ApplicationList = ({ applications }) => {
   const [statuses, setStatuses] = useState(
     applications.reduce((acc, app) => ({ ...acc, [app.id]: app.status }), {})
@@ -16,10 +15,9 @@ const ApplicationList = ({ applications }) => {
 
   const handleSubmit = async (applicationId) => {
     const updatedStatus = statuses[applicationId];
-console.log(updatedStatus)
     try {
-      const response = await axios.patch(
-        `${process.env.BASE_URL}/admin/applications/${applicationId}`,
+      const response = await api.patch(
+        `/admin/applications/${applicationId}`,
         { status: updatedStatus }
       );
       console.log('Status updated:', response.data);

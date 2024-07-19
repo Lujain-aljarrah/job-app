@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import api from '../../../../utils/api';
 const EditJobPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -18,7 +17,7 @@ const EditJobPage = () => {
     if (id) {
       const fetchJob = async () => {
         try {
-          const response = await axios.get(`${process.env.BASE_URL}/admin/jobs/${id}`);
+          const response = await api.get(`/admin/jobs/${id}`);
           setFormData(response.data);
         } catch (error) {
           console.error('Failed to fetch job data:', error);
@@ -39,7 +38,10 @@ const EditJobPage = () => {
     console.log(formData)
     delete formData.applications
     try {
-      await axios.patch(`${process.env.BASE_URL}/admin/jobs/${id}`, formData);
+      await api.patch(
+        `/admin/jobs/${id}`, 
+      formData
+      );
       router.push('/admin');
     } catch (error) {
       console.error('Failed to update job:', error);

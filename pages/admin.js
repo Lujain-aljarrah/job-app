@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Card from '../components/Card';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 const AdminPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -9,8 +9,8 @@ const AdminPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get(`${process.env.BASE_URL}/admin/jobs`);
-      setJobs(response.data);
+      const response = await api.get('/admin/jobs');
+       setJobs(response.data);
     } catch (error) {
       console.error('Failed to fetch jobs:', error);
     }
@@ -18,7 +18,7 @@ const AdminPage = () => {
 
   const handleViewApplications = async (jobId) => {
     try {
-      const response = await axios.get(`${process.env.BASE_URL}/admin/jobs/${jobId}`);
+      const response = await api.get(`/admin/jobs/${jobId}`);
       const jobData = response.data;
    
       router.push({
@@ -36,7 +36,7 @@ const AdminPage = () => {
 
   const handleDeleteJob = async (jobId) => {
     try {
-      await axios.delete(`${process.env.BASE_URL}/admin/jobs/${jobId}`);
+      await api.delete(`/admin/jobs/${jobId}`);
       setJobs(jobs.filter(job => job.id !== jobId));
     } catch (error) {
       console.error('Failed to delete job:', error);

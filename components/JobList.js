@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import JobForm from './JobForm';
 import Modal from './Modal';
 import Card from './Card';
-import axios from 'axios';
-
+import api from '../utils/api'
 
 const JobList = () => {
   const [selectedJob, setSelectedJob] = useState(null);
@@ -11,11 +10,13 @@ const JobList = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get(`${process.env.BASE_URL}/admin/jobs`);
+      const response = await api.get('/admin/jobs');
       setJobs(response.data);
     } catch (error) {
       console.error('Failed to fetch jobs:', error);
     }
+    console.log(jobs)
+
   };
   const handleApplyClick = (job) => setSelectedJob(job);
 
@@ -34,8 +35,10 @@ const JobList = () => {
             key={job.id}
             title={job.title}
             content={job.description}
-            footer={
+            footer={ 
+              // job.applications.length === 0 ?
               <button onClick={() => handleApplyClick(job)}>Apply</button>
+              // : <p>you already applied</p>
             }
           />
         ))}

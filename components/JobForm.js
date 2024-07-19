@@ -1,10 +1,9 @@
-// components/JobForm.js
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 const JobForm = ({ jobId }) => {
   const [formData, setFormData] = useState({
-    userId: 1, // Replace with actual user ID if available
+    userId: 1,
     jobId,
     yearsOfExperience: '',
     noticePeriod: '',
@@ -25,8 +24,10 @@ const JobForm = ({ jobId }) => {
     formData.yearsOfExperience = Number(formData.yearsOfExperience);
     formData.noticePeriod = Number(formData.noticePeriod);
     formData.expectedSalary = Number(formData.expectedSalary);
-    console.log('Form data submitted:', formData);
-    const response = await axios.post(`${process.env.BASE_URL}/jobs/${jobId}/submit`, formData);
+    const response = await api.post(
+      `/jobs/${jobId}/submit`,
+      formData
+    );
   };
 
   return (
