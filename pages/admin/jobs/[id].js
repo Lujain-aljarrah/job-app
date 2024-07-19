@@ -13,12 +13,6 @@ const JobApplicationsPage = () => {
   return (
     <div className="container">
       <h1>Applications for {jobData.title}</h1>
-      <div className="job-details">
-        <div><strong>Company:</strong> {jobData.companyName}</div>
-        <div><strong>Location:</strong> {jobData.companyLocation}</div>
-        <div><strong>Type:</strong> {jobData.type}</div>
-        <div><strong>Description:</strong> {jobData.description}</div>
-      </div>
       <div className="card-container">
         <ApplicationList applications={jobData.applications || []} />
       </div>

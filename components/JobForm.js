@@ -1,5 +1,6 @@
 // components/JobForm.js
 import { useState } from 'react';
+import axios from 'axios';
 
 const JobForm = ({ jobId }) => {
   const [formData, setFormData] = useState({
@@ -19,11 +20,13 @@ const JobForm = ({ jobId }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replace this with actual form submission logic
+    formData.yearsOfExperience = Number(formData.yearsOfExperience);
+    formData.noticePeriod = Number(formData.noticePeriod);
+    formData.expectedSalary = Number(formData.expectedSalary);
     console.log('Form data submitted:', formData);
-    // Example: fetch('/api/applications', { method: 'POST', body: JSON.stringify(formData) })
+    const response = await axios.post(`${process.env.BASE_URL}/jobs/${jobId}/submit`, formData);
   };
 
   return (
@@ -51,7 +54,7 @@ const JobForm = ({ jobId }) => {
         />
       </div>
       <div>
-        <label htmlFor="expectedSalary">Expected Salary:</label>
+        <label htmlFor="expectedSalary">Expected Salary:(JOD)</label>
         <input
           type="number"
           id="expectedSalary"
@@ -68,6 +71,7 @@ const JobForm = ({ jobId }) => {
           name="briefIntro"
           value={formData.briefIntro}
           onChange={handleChange}
+          placeholder='Why are you fit for this role?'
           rows="4"
           required
         />

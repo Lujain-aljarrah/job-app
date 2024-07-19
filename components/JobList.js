@@ -1,25 +1,29 @@
-// components/JobList.js
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import JobForm from './JobForm';
 import Modal from './Modal';
 import Card from './Card';
+import axios from 'axios';
 
-const jobs = [
-  { id: 1, title: 'Software Engineer', description: 'Develop and maintain software solutions.' },
-  { id: 2, title: 'Product Manager', description: 'Oversee product development and strategy.' },
-  { id: 3, title: 'UX Designer', description: 'Design user interfaces and experiences.' },
-];
 
 const JobList = () => {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobs, setJobs] = useState([]);
 
-  const handleApplyClick = (job) => {
-    setSelectedJob(job);
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get(`${process.env.BASE_URL}/admin/jobs`);
+      setJobs(response.data);
+    } catch (error) {
+      console.error('Failed to fetch jobs:', error);
+    }
   };
+  const handleApplyClick = (job) => setSelectedJob(job);
 
-  const handleCloseModal = () => {
-    setSelectedJob(null);
-  };
+  const handleCloseModal = () => setSelectedJob(null);
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   return (
     <div>
@@ -33,7 +37,6 @@ const JobList = () => {
             footer={
               <button onClick={() => handleApplyClick(job)}>Apply</button>
             }
-            horizontal
           />
         ))}
       </div>

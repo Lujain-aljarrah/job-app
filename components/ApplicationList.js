@@ -1,6 +1,33 @@
+import { useState } from 'react';
+import axios from 'axios';
 import Card from './Card';
 
 const ApplicationList = ({ applications }) => {
+  const [statuses, setStatuses] = useState(
+    applications.reduce((acc, app) => ({ ...acc, [app.id]: app.status }), {})
+  );
+
+  const handleStatusChange = (applicationId, newStatus) => {
+    setStatuses({
+      ...statuses,
+      [applicationId]: newStatus
+    });
+  };
+
+  const handleSubmit = async (applicationId) => {
+    const updatedStatus = statuses[applicationId];
+console.log(updatedStatus)
+    try {
+      const response = await axios.patch(
+        `${process.env.BASE_URL}/admin/applications/${applicationId}`,
+        { status: updatedStatus }
+      );
+      console.log('Status updated:', response.data);
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+
   return (
     <div>
       <div className="card-container">
@@ -17,7 +44,18 @@ const ApplicationList = ({ applications }) => {
                 <div><strong>Notice Period:</strong> {application.noticePeriod} days</div>
                 <div><strong>Expected Salary:</strong> ${application.expectedSalary}</div>
                 <div><strong>Brief Introduction:</strong> {application.briefIntro}</div>
-                <div><strong>Status:</strong> {application.status}</div>
+                <div>
+                  <strong>Status:</strong>
+                  <select
+                    value={statuses[application.id]}
+                    onChange={(e) => handleStatusChange(application.id, e.target.value)}
+                  >
+                    <option value="PENDING">PENDING</option>
+                    <option value="ACCEPTED">ACCEPTED</option>
+                    <option value="REJECTED">REJECTED</option>
+                  </select>
+                </div>
+                <button onClick={() => handleSubmit(application.id)}>Update Status</button>
               </>
             }
             horizontal
