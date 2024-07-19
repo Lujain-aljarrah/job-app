@@ -3,7 +3,6 @@ import Card from '../components/Card';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
 const AdminPage = () => {
   const [jobs, setJobs] = useState([]);
   const router = useRouter();
@@ -31,11 +30,13 @@ const AdminPage = () => {
     }
   };
 
+  const handleEditJob = (jobId) => {
+    router.push(`/admin/jobs/edit/${jobId}`);
+  };
+
   const createJobPage = () => {
-    router.push({
-      pathname: `/admin/jobs/create-job`,
-    });
-  }
+    router.push(`/admin/jobs/create-job`);
+  };
 
   useEffect(() => {
     fetchJobs();
@@ -44,7 +45,7 @@ const AdminPage = () => {
   return (
     <div className="container">
       <h1>Admin Dashboard</h1>
-      <button onClick={createJobPage}> Create New Job</button>
+      <button onClick={createJobPage}>Create New Job</button>
       <div className="card-container">
         {jobs.map(job => (
           <Card
@@ -59,8 +60,15 @@ const AdminPage = () => {
                 <div><strong>Applications:</strong> {job._count.applications}</div>
               </>
             }
-            footer={ job._count.applications > 0 &&
-              <button onClick={() => handleViewApplications(job.id)}>View Applications</button>
+            footer={
+              <>
+                {job._count.applications === 0 && (
+                  <button onClick={() => handleEditJob(job.id)}>Edit Job</button>
+                )}
+                {job._count.applications > 0 && (
+                  <button onClick={() => handleViewApplications(job.id)}>View Applications</button>
+                )}
+              </>
             }
           />
         ))}

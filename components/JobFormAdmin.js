@@ -5,7 +5,7 @@ const JobFormAdmin = ({ job, onSubmit }) => {
   const [description, setDescription] = useState(job ? job.description : '');
   const [companyName, setCompanyName] = useState(job ? job.companyName : '');
   const [companyLocation, setCompanyLocation] = useState(job ? job.companyLocation : '');
-  const [type, setType] = useState(job ? job.type : '');
+  const [type, setType] = useState(job ? job.type : 'HYBRID');
 
   const handleSubmit = (e) => {
     e.preventDefault();
