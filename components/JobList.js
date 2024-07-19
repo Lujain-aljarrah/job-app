@@ -10,7 +10,7 @@ const JobList = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await api.get('/admin/jobs');
+      const response = await api.get('/jobs');
       setJobs(response.data);
     } catch (error) {
       console.error('Failed to fetch jobs:', error);
@@ -36,10 +36,10 @@ const JobList = () => {
             title={job.title}
             content={job.description}
             footer={ 
-              // job.applications.length === 0 ?
+              job.applications.length === 0 ?
               <button onClick={() => handleApplyClick(job)}>Apply</button>
-              // : <p>you already applied</p>
-            }
+             : <button disabled style={{backgroundColor: 'gray'}}>Applied</button>       
+                 }
           />
         ))}
       </div>
