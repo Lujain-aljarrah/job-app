@@ -34,6 +34,16 @@ const AdminPage = () => {
     router.push(`/admin/jobs/edit/${jobId}`);
   };
 
+  const handleDeleteJob = async (jobId) => {
+    try {
+      await axios.delete(`${process.env.BASE_URL}/admin/jobs/${jobId}`);
+      setJobs(jobs.filter(job => job.id !== jobId));
+    } catch (error) {
+      console.error('Failed to delete job:', error);
+    }
+  };
+  
+
   const createJobPage = () => {
     router.push(`/admin/jobs/create-job`);
   };
@@ -63,11 +73,15 @@ const AdminPage = () => {
             footer={
               <>
                 {job._count.applications === 0 && (
+                  <>
                   <button onClick={() => handleEditJob(job.id)}>Edit Job</button>
+                  <button onClick={() => handleDeleteJob(job.id)}>Delete Job</button> 
+                  </>
                 )}
                 {job._count.applications > 0 && (
                   <button onClick={() => handleViewApplications(job.id)}>View Applications</button>
                 )}
+
               </>
             }
           />
