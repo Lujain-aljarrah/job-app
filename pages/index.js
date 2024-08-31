@@ -1,4 +1,3 @@
-// pages/index.js
 import JobList from '../components/JobList';
 
 const Home = () => {
